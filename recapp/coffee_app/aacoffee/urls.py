@@ -4,7 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'coffees', views.CoffeeViewSet)
-# router.register(r'posts', views.PostViewSet)
+router.register(r'posts', views.PostViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

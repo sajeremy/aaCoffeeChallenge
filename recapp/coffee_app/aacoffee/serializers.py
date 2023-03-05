@@ -7,7 +7,7 @@ class CoffeeSerializer(serializers.HyperlinkedModelSerializer):
         model = Coffee
         fields = ('id', 'name', 'year',
                   'caffine_content', 'caffine_percentage')
-        # read_only_fields = ('id')
+        read_only_fields = ('id',)
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
