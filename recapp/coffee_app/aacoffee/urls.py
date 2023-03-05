@@ -2,13 +2,15 @@
 from django.urls import path, include
 from .views import (
     CoffeePingView,
-    CoffeeListView
+    CoffeeListView,
+    CoffeeDetailView
 
 )
 
 urlpatterns = [
     path('api/coffee/ping', CoffeePingView.as_view()),
     path('api/coffee', CoffeeListView.as_view()),
+    path('api/coffee/<int:coffee_id>/', CoffeeDetailView.as_view())
 ]
 
 

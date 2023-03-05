@@ -35,15 +35,34 @@ class CoffeeListView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # from rest_framework import viewsets
 
-        # from .serializers import CoffeeSerializer, PostSerializer
-        # from .models import Coffee, Post
+class CoffeeDetailView(APIView):
+    def get_object(self, coffee_id):
+        try:
+            return Coffee.objects.get(id=coffee_id)
+        except Coffee.DoesNotExist:
+            return None
 
-        # class CoffeeViewSet(viewsets.ModelViewSet):
-        #     queryset = Coffee.objects.all().order_by('name')
-        #     serializer_class = CoffeeSerializer
+    def get(self, req, coffee_id):
+        coffee_instance = self.get_object(coffee_id)
+        if not coffee_instance:
+            return Response(
+                {"res": f'Object with coffee id: {coffee_id} does not exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        # class PostViewSet(viewsets.ModelViewSet):
-        #     queryset = Post.objects.all().order_by('title')
-        #     serializer_class = PostSerializer
+        serializer = CoffeeSerializer(coffee_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # from rest_framework import viewsets
+
+    # from .serializers import CoffeeSerializer, PostSerializer
+    # from .models import Coffee, Post
+
+    # class CoffeeViewSet(viewsets.ModelViewSet):
+    #     queryset = Coffee.objects.all().order_by('name')
+    #     serializer_class = CoffeeSerializer
+
+    # class PostViewSet(viewsets.ModelViewSet):
+    #     queryset = Post.objects.all().order_by('title')
+    #     serializer_class = PostSerializer
