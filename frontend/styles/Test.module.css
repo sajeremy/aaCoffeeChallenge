@@ -1,0 +1,22 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  border: 1px green solid;
+  height: 100%;
+}
+
+.left,
+.right {
+  width: 25%;
+  height: 200px;
+  border: 1px green solid;
+  color: palegreen;
+}
+
+.main-page .main-center-col {
+  width: 50%;
+  height: 200px;
+  border: 1px blue solid;
+
+}
+

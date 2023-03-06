@@ -22,34 +22,3 @@ export default function Home() {
     </>
     )
 }
-
-
-// import React from 'react'
-// import ReactDOM from 'react-dom'
-// import {Provider} from 'react-redux'
-// import {BrowserRouter} from 'react-router-dom'
-// import App from './app'
-// import configureStore from './store'
-
-// const store = configureStore();
-
-// const Root = () => {
-//   return (
-//     <Provider store={store}>
-//       <BrowserRouter>
-//         <App/>
-//       </BrowserRouter>
-//     </Provider>
-//   )
-// }
-
-// const renderApplication = () => {
-//   ReactDOM.render(
-//     <React.StrictMode>
-//       <Root />
-//     </React.StrictMode>,
-//     document.getElementById("root")
-//   );
-// };
-
-// renderApplication()
