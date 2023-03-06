@@ -2,15 +2,21 @@
 from django.urls import path, include
 from .views import (
     CoffeePingView,
+    PostPingView,
     CoffeeListView,
-    CoffeeDetailView
+    CoffeeDetailView,
+    PostListView,
+    PostDetailView
 
 )
 
 urlpatterns = [
+    path('api/post/ping', PostPingView.as_view()),
     path('api/coffee/ping', CoffeePingView.as_view()),
     path('api/coffee', CoffeeListView.as_view()),
-    path('api/coffee/<int:coffee_id>/', CoffeeDetailView.as_view())
+    path('api/coffee/<int:coffee_id>/', CoffeeDetailView.as_view()),
+    path('api/post', PostListView.as_view()),
+    path('api/post/<int:post_id>/', PostDetailView.as_view())
 ]
 
 

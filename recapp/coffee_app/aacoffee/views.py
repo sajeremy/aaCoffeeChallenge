@@ -12,13 +12,22 @@ from .models import Coffee, Post
 
 class CoffeePingView(APIView):
     def get(self, req):
-        # return HttpResponse('Hello, World!')
+        return Response(status=status.HTTP_200_OK)
+
+
+class PostPingView(APIView):
+    def get(self, req):
         return Response(status=status.HTTP_200_OK)
 
 
 class CoffeeListView(APIView):
     def get(self, req):
-        coffees = Coffee.objects.order_by('name')  # .all()
+        order = req.GET.get("ord")
+        if order == "dsc":
+            coffees = Coffee.objects.order_by('-name')
+        else:
+            coffees = Coffee.objects.order_by('name')
+
         serializer = CoffeeSerializer(coffees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -47,22 +56,79 @@ class CoffeeDetailView(APIView):
         coffee_instance = self.get_object(coffee_id)
         if not coffee_instance:
             return Response(
-                {"res": f'Object with coffee id: {coffee_id} does not exists'},
+                {"res": f'Object with coffee id:{coffee_id} does not exists'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         serializer = CoffeeSerializer(coffee_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # from rest_framework import viewsets
+    def delete(self, req, coffee_id):
+        coffee_instance = self.get_object(coffee_id)
+        if not coffee_instance:
+            return Response(
+                {"res": f'Object with coffee id:{coffee_id} does not exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        coffee_instance.delete()
+        return Response(
+            {"res": "Coffee deleted!"},
+            status=status.HTTP_200_OK
+        )
 
-    # from .serializers import CoffeeSerializer, PostSerializer
-    # from .models import Coffee, Post
 
-    # class CoffeeViewSet(viewsets.ModelViewSet):
-    #     queryset = Coffee.objects.all().order_by('name')
-    #     serializer_class = CoffeeSerializer
+class PostListView(APIView):
+    def get(self, req):
+        # using url query params - ?ord=asc or ?ord=dsc
+        order = req.GET.get("ord")
+        if order == "dsc":
+            posts = Post.objects.order_by('-created_at')
+        else:
+            posts = Post.objects.order_by('created_at')
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # class PostViewSet(viewsets.ModelViewSet):
-    #     queryset = Post.objects.all().order_by('title')
-    #     serializer_class = PostSerializer
+    def post(self, req):
+        post_data = {
+            'title': req.data.get('title'),
+            'coffee': req.data.get('coffee'),
+            'text': req.data.get('text'),
+            'rating': req.data.get('rating')
+        }
+        serializer = PostSerializer(data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostDetailView(APIView):
+    def get_object(self, post_id):
+        try:
+            return Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return None
+
+    def get(self, req, post_id):
+        post_instance = self.get_object(post_id)
+        if not post_instance:
+            return Response(
+                {"res": f'Object with post id:{post_id} does not exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = PostSerializer(post_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, req, post_id):
+        post_instance = self.get_object(post_id)
+        if not post_instance:
+            return Response(
+                {"res": f'Object with post id:{post_id} does not exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        post_instance.delete()
+        return Response(
+            {"res": "Post deleted!"},
+            status=status.HTTP_200_OK
+        )

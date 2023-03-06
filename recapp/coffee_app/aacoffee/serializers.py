@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Coffee, Post
 
 
-class CoffeeSerializer(serializers.HyperlinkedModelSerializer):
+class CoffeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coffee
         fields = ('id', 'name', 'year',
@@ -10,7 +10,7 @@ class CoffeeSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('id',)
 
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('title', 'coffee', 'text', 'rating')
+        fields = ('title', 'coffee', 'text', 'rating', 'created_at')
